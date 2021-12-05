@@ -1,6 +1,7 @@
 package com.demo.todos.service;
 
 
+import com.demo.todos.common.exception.CNotFoundException;
 import com.demo.todos.dto.TodoRequestDto;
 import com.demo.todos.dto.TodoResponseDto;
 import com.demo.todos.entity.Todo;
@@ -39,7 +40,7 @@ public class TodoService {
         int id = Integer.parseInt(todoId);
 
         Optional<Todo> todo = todoRepository.findById(id);
-        if(todo.isEmpty()) return null;
+        if(todo.isEmpty()) throw new CNotFoundException();
 
         return TodoResponseDto.toDto(todo.get());
     }
@@ -50,7 +51,7 @@ public class TodoService {
         int id = Integer.parseInt(todoId);
 
         Optional<Todo> todoEntity = todoRepository.findById(id);
-        if(todoEntity.isEmpty()) return null;
+        if(todoEntity.isEmpty()) throw new CNotFoundException();
 
         Todo todo = todoEntity.get();
         todo.modify(requestDto);
@@ -63,7 +64,7 @@ public class TodoService {
         int id = Integer.parseInt(todoId);
 
         Optional<Todo> todoEntity = todoRepository.findById(id);
-        if(todoEntity.isEmpty()) return null;
+        if(todoEntity.isEmpty()) throw new CNotFoundException();
 
         Todo todo = todoEntity.get();
         todoRepository.delete(todo);

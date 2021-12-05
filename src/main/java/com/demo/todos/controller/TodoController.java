@@ -29,7 +29,7 @@ public class TodoController {
                                                   ,@RequestBody TodoRequestDto requestDto) {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
 
-        if(!todoValidator.isValid(requestDto)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorCode.BAD_REQUEST);
+        todoValidator.isValid(requestDto);
 
         TodoResponseDto responseDto = todoService.createTodo(requestDto);
         return ResponseEntity.ok().body(responseDto);
@@ -45,7 +45,6 @@ public class TodoController {
     @GetMapping("/{todoId}")
     public ResponseEntity findTodoById(@PathVariable String todoId) {
         TodoResponseDto responseDto = todoService.findTodoById(todoId);
-        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
         return ResponseEntity.ok().body(responseDto);
     }
 
@@ -55,10 +54,9 @@ public class TodoController {
                                     , @RequestBody TodoRequestDto requestDto) {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
 
-        if(!todoValidator.isValid(requestDto)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorCode.BAD_REQUEST);
+        todoValidator.isValid(requestDto);
 
         TodoResponseDto responseDto = todoService.updateTodo(todoId, requestDto);
-        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
 
         return ResponseEntity.ok().body(responseDto);
     }
@@ -69,7 +67,6 @@ public class TodoController {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
 
         TodoResponseDto responseDto = todoService.deleteTodo(todoId);
-        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

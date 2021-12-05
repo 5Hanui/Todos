@@ -66,7 +66,7 @@ public class TodoController {
                             , @RequestParam(value = "apikey",required = false) String apikey) {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
 
-        TodoResponseDto responseDto = todoService.deleteTodo(todoId);
+        todoService.deleteTodo(todoId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -5,7 +5,7 @@
 # 개발 환경 및 사용 버전
 
 - IDE : IntelliJ IDEA Ultimate
-- OS: Window
+- OS: Windows
 - JAVA 11
 - Spring boot 2.6.1
 - Gradle

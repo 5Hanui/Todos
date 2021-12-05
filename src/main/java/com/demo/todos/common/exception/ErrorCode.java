@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
 
+    BAD_REQUEST(400, "Bad Request"),
     NOT_FOUND(404, "Not Found"),
     NOT_AUTHORIZED(401, "Not Authorized"),
     INTERNAL_SERVER_ERROR(500, "Server error")

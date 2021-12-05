@@ -1,6 +1,7 @@
 package com.demo.todos.controller;
 
 import com.demo.todos.common.exception.ErrorCode;
+import com.demo.todos.common.exception.validator.TodoValidator;
 import com.demo.todos.dto.TodoRequestDto;
 import com.demo.todos.dto.TodoResponseDto;
 import com.demo.todos.service.TodoService;
@@ -20,11 +21,15 @@ public class TodoController {
 
     private final TodoService todoService;
 
+    private final TodoValidator todoValidator;
+
     @PostMapping()
     @ResponseBody
-    public ResponseEntity create(@RequestParam(value = "apikey",required = true) String apikey
+    public ResponseEntity create(@RequestParam(value = "apikey", required = false) String apikey
                                                   ,@RequestBody TodoRequestDto requestDto) {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
+
+        if(!todoValidator.isValid(requestDto)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorCode.BAD_REQUEST);
 
         TodoResponseDto responseDto = todoService.createTodo(requestDto);
         return ResponseEntity.ok().body(responseDto);
@@ -49,6 +54,8 @@ public class TodoController {
                                     , @RequestParam(value = "apikey",required = false) String apikey
                                     , @RequestBody TodoRequestDto requestDto) {
         if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
+
+        if(!todoValidator.isValid(requestDto)) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorCode.BAD_REQUEST);
 
         TodoResponseDto responseDto = todoService.updateTodo(todoId, requestDto);
         if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);

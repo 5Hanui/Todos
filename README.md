@@ -29,3 +29,8 @@ java -jar -Dspring.profiles.active=dev {jar파일}
 ```
 java -jar -Dspring.profiles.active=prod {jar파일}
 ```
+---------------------------------------------------
+# 로컬 환경에서 실행하기
+![image](https://user-images.githubusercontent.com/22045436/144747970-cce8b179-960b-4444-8be8-84a57ea9ea6b.png)
+
+Active profiles: dev/prod 실행환경 

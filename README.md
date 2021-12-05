@@ -10,3 +10,22 @@
 - Spring boot 2.6.1
 - Gradle
 - Spring Data JPA
+
+# 실행 하기
+1. jar 만들기  
+프로젝트 위치로 이동
+```
+gradlew bootJar
+```
+2. /build/libs/  
+jar파일 확인  
+
+> dev 환경에서 실행
+```
+java -jar -Dspring.profiles.active=dev {jar파일}
+```
+
+> prod 환경에서 실행
+```
+java -jar -Dspring.profiles.active=prod {jar파일}
+```

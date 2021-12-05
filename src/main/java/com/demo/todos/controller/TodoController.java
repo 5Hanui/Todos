@@ -1,12 +1,16 @@
 package com.demo.todos.controller;
 
+import com.demo.todos.common.exception.ErrorCode;
 import com.demo.todos.dto.TodoRequestDto;
 import com.demo.todos.dto.TodoResponseDto;
 import com.demo.todos.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -18,28 +22,48 @@ public class TodoController {
 
     @PostMapping()
     @ResponseBody
-    public ResponseEntity<TodoResponseDto> create(@RequestBody TodoRequestDto requestDto) {
+    public ResponseEntity create(@RequestParam(value = "apikey",required = true) String apikey
+                                                  ,@RequestBody TodoRequestDto requestDto) {
+        if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
+
         TodoResponseDto responseDto = todoService.createTodo(requestDto);
         return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping()
-    public void findAll() {
-        log.info("findAll");
+    public ResponseEntity<List<TodoResponseDto>> findAll() {
+
+        List<TodoResponseDto> responseDtoList = todoService.findAll();
+        return ResponseEntity.ok().body(responseDtoList);
     }
 
-    @GetMapping("/{id}")
-    public void findTodoById(@PathVariable Integer id) {
-        log.info("findTodoById");
+    @GetMapping("/{todoId}")
+    public ResponseEntity findTodoById(@PathVariable String todoId) {
+        TodoResponseDto responseDto = todoService.findTodoById(todoId);
+        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
+        return ResponseEntity.ok().body(responseDto);
     }
 
-    @PutMapping("/{id}")
-    public void updateTodo(@PathVariable Integer id) {
-        log.info("updateTodo");
+    @PutMapping("/{todoId}")
+    public ResponseEntity updateTodo(@PathVariable String todoId
+                                    , @RequestParam(value = "apikey",required = false) String apikey
+                                    , @RequestBody TodoRequestDto requestDto) {
+        if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
+
+        TodoResponseDto responseDto = todoService.updateTodo(todoId, requestDto);
+        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
+
+        return ResponseEntity.ok().body(responseDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Integer id) {
-        log.info("deleteTodo");
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity deleteTodo(@PathVariable String todoId
+                            , @RequestParam(value = "apikey",required = false) String apikey) {
+        if(apikey == null || !apikey.equals("123")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.NOT_AUTHORIZED);
+
+        TodoResponseDto responseDto = todoService.deleteTodo(todoId);
+        if(responseDto == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorCode.NOT_FOUND);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

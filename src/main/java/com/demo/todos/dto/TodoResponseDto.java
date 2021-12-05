@@ -2,11 +2,14 @@ package com.demo.todos.dto;
 
 import com.demo.todos.entity.Todo;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,13 +19,16 @@ public class TodoResponseDto {
     private String name;
     private Boolean completed;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonProperty("complete_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="Asia/Seoul")
     private LocalDateTime completedAt;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonProperty("created_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="Asia/Seoul")
     private LocalDateTime createdAt;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonProperty("updated_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="Asia/Seoul")
     private LocalDateTime updatedAt;
 
     public static TodoResponseDto toDto(Todo todo) {
@@ -34,5 +40,16 @@ public class TodoResponseDto {
                 .createdAt(todo.getCreatedAt())
                 .updatedAt(todo.getUpdatedAt())
                 .build();
+    }
+
+    public static List<TodoResponseDto> toDtoList(List<?extends Todo> list) {
+        List<TodoResponseDto> dto = new ArrayList<>();
+
+        if(list != null) {
+            for(Todo todo : list) {
+                dto.add(toDto(todo));
+            }
+        }
+        return dto;
     }
 }

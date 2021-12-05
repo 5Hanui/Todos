@@ -10,6 +10,11 @@
 - Spring boot 2.6.1
 - Gradle
 - Spring Data JPA
+- H2 Database
+
+# DB setting
+![image](https://user-images.githubusercontent.com/22045436/144750523-ed8b3b6b-775f-4fe5-887c-1e8d04c34a55.png)
+
 
 # 실행 하기
 1. jar 만들기  
